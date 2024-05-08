@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>お買い上げ明細書（納品書）</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 21cm; /* A4サイズの幅 */
+            height: 29.7cm; /* A4サイズの高さ */
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #000; /* 枠線の追加 */
+            position: relative; /* 相対位置指定 */
+        }
+        .title {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .message {
+            font-size: 14px;
+            margin-left: 0px; /* 左の余白を10pxに変更 */
+        }
+        .dear {
+            display: block;
+            text-align: left;
+            margin-top: 20px; /* 上のマージンを追加 */
+            margin-bottom: 20px; /* 下のマージンを追加 */
+        }
+        .dear::before {
+            content: "　　　　　　　"; /* 全角スペースを10文字分追加 */
+        }
+        .total-container {
+            border: 3px solid #000; /* 1pxの境界線を追加 */
+            padding: 10px; /* 内側の余白を追加 */
+            margin-top: 20px; /* 上部のマージンを追加 */
+            /* box-sizing: border-box; */ /* パディングと境界線が要素の幅に含まれるようにする */
+            box-sizing: border-box;
+            width: calc(250px); /* パディングやボーダーの幅を考慮して調整 */
+            height: calc(50px);
+        }
+        .purchase-detail {
+            border: 3px solid #000; /* 枠線を追加 */
+            padding: 10px; /* 枠線と内容の間に余白を追加 */
+        }
+        table {
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid black; /* 枠線を追加 */
+            padding: 8px;
+            text-align: left;
+            height: 18px; 
+        }
+        th.column1, td.column1 {
+            width: 700px;
+        }
+        th.column2, td.column2 {
+            width: 70px;
+        }
+        th.column3, td.column3 {
+            width: 200px;
+        }
+        th.column4, td.column4 {
+          width: 200px;
+        }
+        td.column2, th.column2,
+        td.column6, th.column6,
+        td.column10, th.column10,
+        td.column14, th.column14,
+        td.column18, th.column18 {
+         text-align: center;
+        }
+        td.column3, th.column3, td.column4, th.column4 ,td.column7, th.column7,
+        td.column8, th.column8,td.column11, th.column11,td.column12, th.column12,
+        td.column15, th.column15,td.column16, th.column16,td.column19, th.column19,
+        td.column20, th.column20 {
+        text-align: right;}
+        .double-border {
+            border-top: 3px double #000; /* 2重線の追加 */
+            width: 100%; /* テーブルと同じ横幅 */
+            margin-top: 10px; /* マージンを追加 */
+        }
+        .message.message-1 {
+           font-size:14px 
+        }
+        .message.message-2 {
+           font-size: 12px;
+           margin-bottom: -16px;
+        }
+        .message.message-3 {
+           font-size: 12px;
+           margin-bottom: -18px;
+        }
+        .message.message-4 {
+           font-size: 12px;
+           margin-bottom: 57px;
+        }
+        .dashed-border {
+            border-style: dashed; /* 破線の境界線を設定 */
+            border-width: 1px; /* 境界線の太さを2pxに設定 */
+            border-color: black; /* 境界線の色をグレーに設定 */
+            margin-top: 11px;
+            margin-left: -21px; /* 左側の余白を0に設定 */
+            width: 835px;
+        }
+        .message.for internal use{
+            margin-left: 0px;
+        }
+        .internal-table {
+            margin-top: 20px;
+        }
+        .internal-table th,
+        .internal-table td {
+            border: 1px solid black; /* 枠線を追加 */
+            padding: 0px;
+            text-align: left;
+            height: 36px;
+            font-size: 10px; 
+        }
+        th.internal.use1, td.internal.use1 {
+            width: 17px;
+        }
+        th.internal.use2, td.internal.use2 {
+            width: 59px;
+        }
+        th.internal.use3, td.internal.use3 {
+            width: 193px;
+        }
+        th.internal.use4, td.internal.use4 {
+            width: 59px;
+        }
+        .print-button {
+            padding-left: 30px;
+            padding-right: 30px;
+            width: 114px;
+            height: 56px;
+            margin-top: 20px;
+            margin-bottom: 50px;
+            font-style: initial;
+            font-size: 25px;
+        }
+
+        .print-button:hover {
+            background-color: #45a049; /* Darker Green */
+        }
+        @media print {
+            /* 2枚目以降の要素を非表示にする */
+            body > *:not(.container):not(script) {
+                display: none !important;
+            }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">お買い上げ明細書（納品書）</h1>
+        <p class="dear">様</p>
+        <p class="message">
+            この度は数多い出品者の中からお買い上げいただきありがとうございます。<br>
+            下記の内容にて納品させていただきます。<br>
+            ご確認くださいますようお願い致します。<br>
+            また、ご不明な点等ございましたらお気軽にお問合せください。<br>
+        </p>
+        <p class="total-container">総合計金額　　　　　　　円</p>
+        <p class="message purchase-detail">お買い上げ明細</p>
+        <p class="message">【ご注文日】</p>
+        <p class="message">【ご注文番号】</p>
+        <table>
+            <tr>
+                <th class="column1">商品名</th>
+                <th class="column2">数量</th>
+                <th class="column3">単価</th>
+                <th class="column4">金額</th>
+            </tr>
+            <tr>
+                <td class="column1"></td>
+                <td class="column2"></td>
+                <td class="column3"></td>
+                <td class="column4"></td>
+            </tr>
+            <tr>
+                <td class="column5"></td>
+                <td class="column6"></td>
+                <td class="column7"></td>
+                <td class="column8"></td>
+            </tr>
+            <tr>
+                <td class="column9"></td>
+                <td class="column10"></td>
+                <td class="column11"></td>
+                <td class="column12"></td>
+            </tr>
+            <tr>
+                <td class="column13"></td>
+                <td class="column14"></td>
+                <td class="column15"></td>
+                <td class="column16"></td>
+            </tr>
+            <tr>
+                <td class="column17"></td>
+                <td class="column18"></td>
+                <td class="column19"></td>
+                <td class="column20"></td>
+            </tr>
+        </table>
+        <table class="double-border"></table>
+        <p class="message message-1">備考</p>
+        <p class="message message-2">他にも多数の商品を出品しております</p>
+        <p class="message message-3">お気に召す商品がございましたら、</p>
+        <p class="message message-4">またのご利用お待ちしております。</p>
+        <table class="double-border"></table>
+        <table class="dashed-border"></table>
+        <p class="message for internal use">以下社内利用</p>
+        <table class="internal-table">
+            <tr>
+    <th class="internal-title1">商品画像</th>
+    <th class="internal-title2">商品コード</th>
+    <th class="internal-title3">商品名</th>
+    <th class="internal-title4">梱包方法</th>
+</tr>
+<tr>
+    <td class="internal-use1"></td>
+    <td class="internal-use2"><input type="text" class="product-code-input"></td>
+    <td class="internal-use3"></td>
+    <td class="internal-use4"></td>
+</tr>
+<tr>
+    <td class="internal-use5"></td>
+    <td class="internal-use6"><input type="text" class="product-code-input"></td>
+    <td class="internal-use7"></td>
+    <td class="internal-use8"></td>
+</tr>
+<tr>
+    <td class="internal-use9"></td>
+    <td class="internal-use10"><input type="text" class="product-code-input"></td>
+    <td class="internal-use11"></td>
+    <td class="internal-use12"></td>
+</tr>
+<tr>
+    <td class="internal-use13"></td>
+    <td class="internal-use14"><input type="text" class="product-code-input"></td>
+    <td class="internal-use15"></td>
+    <td class="internal-use16"></td>
+</tr>
+<tr>
+    <td class="internal-use17"></td>
+    <td class="internal-use18"><input type="text" class="product-code-input"></td>
+    <td class="internal-use19"></td>
+    <td class="internal-use20"></td>
+</tr>
+
+        </table>
+        <button id="printButton" style="
+        padding-left: 30px;
+        padding-right: 30px;
+        width: 114px;
+        height: 56px;
+        margin-top: 20px;
+        margin-bottom: 50px;
+        font-style: initial;
+        font-size: 25px;
+    ">印刷</button>
+    </div>
+    <script>
+        // 別表のリストを作成（商品コードと梱包方法の対応表）
+        var packingMethods = {
+            "M101": "クリックポスト",
+            "U100": "普通郵便",
+            "F137": "匿名配送",
+            "N100": "宅急便",
+            // 必要に応じて追加
+        };
+
+        // 印刷ボタンの要素を取得
+        var printButton = document.getElementById('printButton');
+
+        // 印刷ボタンがクリックされたときの処理
+        printButton.addEventListener('click', function() {
+            // 印刷プレビューを表示
+            window.print();
+        });
+        // 商品コードのinput要素を取得
+var productCodeInputs = document.querySelectorAll('.product-code-input');
+
+// 商品コードのinput要素を取得
+var productCodeInputs = document.querySelectorAll('.product-code-input');
+
+// 商品コードのinput要素が変更されたときの処理
+productCodeInputs.forEach(function(input) {
+    input.addEventListener('change', function() {
+        // 変更があった商品コードの行を特定
+        var row = input.closest('tr');
+        var productCode = input.value.trim(); // 商品コードを取得
+
+        // 商品コードに対応する梱包方法を反映する関数
+        function reflectPackingMethod(productCode, packingMethodCell) {
+            // 商品コードに対応する梱包方法があればセルに反映
+            if (packingMethods.hasOwnProperty(productCode)) {
+                packingMethodCell.textContent = packingMethods[productCode];
+            } else {
+                packingMethodCell.textContent = "梱包方法未定"; // 対応する梱包方法がない場合のデフォルト値
+            }
+        }
+
+        // 商品コードに対応する内部利用情報を反映する関数
+        function reflectInternalUse(productCode, internalUseColumn, correspondingInternalUseCell) {
+            // 商品コードに対応する内部利用情報があればセルに反映
+            if (packingMethods.hasOwnProperty(productCode)) {
+                correspondingInternalUseCell.textContent = packingMethods[productCode];
+            } else {
+                correspondingInternalUseCell.textContent = "梱包方法未定"; // 対応する梱包方法がない場合のデフォルト値
+            }
+        }
+
+        // 商品コードに対応する梱包方法を反映
+        var packingMethodCells = row.querySelectorAll('.internal-use4, .internal-use8, .internal-use12, .internal-use16, .internal-use20');
+        reflectPackingMethod(productCode, packingMethodCells[0]);
+        // 商品コードに対応する内部利用情報を反映
+        var internalUseColumns = ['internal-use2', 'internal-use6', 'internal-use10', 'internal-use14', 'internal-use18'];
+        var correspondingInternalUseCells = ['internal-use4', 'internal-use8', 'internal-use12', 'internal-use16', 'internal-use20'];
+        internalUseColumns.forEach(function(internalUseColumn, index) {
+            reflectInternalUse(productCode, internalUseColumn, row.querySelector('.' + correspondingInternalUseCells[index]));
+        });
+    });
+});
+        // ページ読み込み時に梱包方法をテーブルに追加
+        addPackingMethodsToTable();
+    </script>
+</body>
+</html>
